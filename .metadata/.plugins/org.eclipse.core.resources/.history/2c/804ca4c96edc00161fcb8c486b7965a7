@@ -1,0 +1,50 @@
+// Director.java
+
+public class Director
+{
+	private String first_name;
+	private String last_name;
+	private int birth_year;
+	private int directed_films;
+	
+	public Director()
+	{
+		
+	}
+	
+	public String getFirstName()
+	{
+		return first_name;
+	}
+	
+	public String getLastName()
+	{
+		return last_name;
+	}
+	
+	public int getBirthYear()
+	{
+		return birth_year;
+	}
+	
+	public int getDirectedFilms()
+	{
+		return directed_films;
+	}
+	
+	public void setFirstName(String first_name)
+	{
+		this.first_name = first_name;
+	}
+	
+	public void setLastName(String lastName)
+	{
+		this.last_name = lastName;
+	}
+	
+	@Override
+	public String toString()
+	{
+		return 
+	}
+}
