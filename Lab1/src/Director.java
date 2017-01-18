@@ -29,22 +29,22 @@ public class Director
 	/*Getters*/
 	public String getFirstName()
 	{
-		return first_name;
+		return this.first_name;
 	}
 	
 	public String getLastName()
 	{
-		return last_name;
+		return this.last_name;
 	}
 	
 	public int getBirthYear()
 	{
-		return birth_year;
+		return this.birth_year;
 	}
 	
 	public int getNumberOfDirectedFilms()
 	{
-		return num_of_directed_films;
+		return this.num_of_directed_films;
 	}
 	
 	/*Setters*/
@@ -69,9 +69,8 @@ public class Director
 	}
 	
 	/*Mutators*/
-	
 	public void incrementNumberOfDirectedFilms()
 	{
-		num_of_directed_films++;
+		this.num_of_directed_films++;
 	}
 }

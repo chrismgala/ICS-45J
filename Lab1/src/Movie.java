@@ -9,7 +9,6 @@ public class Movie
 	private Director director;
 	
 	/*Constructor*/
-	
 	public Movie()
 	{
 		
@@ -38,31 +37,30 @@ public class Movie
 	/*Getters*/
 	public int getDurationMin()
 	{
-		return duration_min;
+		return this.duration_min;
 	}
 	
 	public int getReleaseYear()
 	{
-		return release_year;
+		return this.release_year;
 	}
 	
 	public double getPriceUSD()
 	{
-		return price_USD;
+		return this.price_USD;
 	}
 	
 	public String getTitle()
 	{
-		return title;
+		return this.title;
 	}
 	
 	public Director getDirector()
 	{
-		return director;
+		return this.director;
 	}
 	
 	/*Setters*/
-	
 	public void setDurationMin(int duration_min)
 	{
 		this.duration_min = duration_min;
@@ -91,20 +89,17 @@ public class Movie
 	public void setDirector(String first_name, String last_name, int birth_year, 
 		int num_of_directed_movies)
 	{
-		director.setFirstName(first_name);
-		director.setLastName(last_name);
-		director.setBirthYear(birth_year);
-		director.setNumberOfDirectedFilms(num_of_directed_movies);
+		this.director = new Director(first_name, last_name, birth_year, num_of_directed_movies);
 	}
 	
 	@Override
 	public String toString()
 	{
-		return "Title: "+title+"\n"+
-				"Published in: "+release_year+"\n"
-				+"Price: $"+price_USD+"\n"
-				+"Written by: "+director.getFirstName()+" "+director.getLastName()+
-				", who was born in "+director.getBirthYear()+" and has "+director.getNumberOfDirectedFilms()+" releases";
+		return "Title: " + title + "\n" 
+				+ "Published in: " + release_year + "\n"
+				+ "Price: $" + price_USD + "\n"
+				+ "Written by: "+ director.getFirstName() + " " + director.getLastName() 
+				+ ", who was born in "+ director.getBirthYear() +" and has "+ director.getNumberOfDirectedFilms() +" releases";
 	}
 	
 }
