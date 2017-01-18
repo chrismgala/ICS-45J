@@ -1,0 +1,24 @@
+// Movie.java
+
+public class Movie
+{
+	private int duration_min;
+	private int release_year;
+	private double price_USD;
+	private String title;
+	private Director director;
+	
+	/*Constructor*/
+	
+	/*Copy Constructor*/
+	
+	/*Getters*/
+	
+	/*Setters*/
+	
+	public void setDirector(String firstName, String lastName, int birthYear, 
+		int numOfDirectedMovies)
+	{
+		
+	}
+}
