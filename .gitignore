@@ -1,5 +1,8 @@
 # Generated files
 .DS_Store
+**/.classpath
+**/.gitignore
+**/.project
 
 # Dependency directories
 /RemoteSystemsTempFiles
