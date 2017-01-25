@@ -1,4 +1,4 @@
-// Lab1.java (Main)
+// Lab2.java (Main)
 // Chris Gala 64338761
 // Wai Phyo
 

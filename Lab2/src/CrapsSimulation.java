@@ -1,14 +1,14 @@
-import java.util.Scanner;
-
-// Shooter.java
+// CrapsSimulation.java
 // Chris Gala 64338761
 // Wai Phyo
 
+import java.util.Scanner;
+
 public class CrapsSimulation
 {
-	// private variables
-	private static CrapsGame c_game;
-	private static CrapsMetricsMonitor c_monitor;
+	// Private variables
+	private static CrapsGame cg;
+	private static CrapsMetricsMonitor cmm;
 	private static String user_name;
 	private static int balance;
 	private static int bet;
@@ -16,10 +16,11 @@ public class CrapsSimulation
 	private static int lose_streak;
 	
 	
-	// constructors
-	public CrapsSimulation() {
-		c_monitor = new CrapsMetricsMonitor();
-		c_game = new CrapsGame(c_monitor);
+	// Constructor
+	public CrapsSimulation() 
+	{
+		cmm = new CrapsMetricsMonitor();
+		cg = new CrapsGame(cmm);
 		user_name = "";
 		balance = 0;
 		bet = 0;
@@ -27,101 +28,176 @@ public class CrapsSimulation
 		lose_streak = 0;
 	}
 	
-	// setters and getters
-	public void set_CrapsGame() {
+	// Getters / Setters
+	public void set_CrapsGame() 
+	{
 		
 	}
 	
-	public CrapsGame get_CrapsGame() {
-		return c_game;
+	public CrapsGame get_CrapsGame() 
+	{
+		return cg;
 	}
 	
-	public void set_CrapsMetricsMonitor() {
+	public void set_CrapsMetricsMonitor() 
+	{
 		
 	}
 	
-	public CrapsMetricsMonitor get_CrapsMetricsMonitor() {
-		return c_monitor;
+	public CrapsMetricsMonitor get_CrapsMetricsMonitor() 
+	{
+		return cmm;
 	}
 	
-	public void set_UserName(String new_name) {
+	public void set_UserName(String new_name) 
+	{
 		user_name = new_name;
 	}
 	
 	
-	public String get_UserName() {
+	public String get_UserName() 
+	{
 		return user_name;
 	}
 	
-	public void set_balance(int new_balance) {
+	public void set_balance(int new_balance) 
+	{
 		balance = new_balance;
 	}
 	
-	public int get_balance() {
+	public int get_balance() 
+	{
 		return balance;
 	}
 	
-	public void set_bet(int new_bet) {
+	public void set_bet(int new_bet) 
+	{
 		bet = new_bet;
 	}
 	
-	public int get_bet() {
+	public int get_bet() 
+	{
 		return bet;
 	}
 	
-	public void set_winstreak(int new_ws) {
+	public void set_winstreak(int new_ws) 
+	{
 		win_streak = new_ws;
 	}
 	
-	public int get_winstreak() {
+	public int get_winstreak() 
+	{
 		return win_streak;
 	}
 	
-	public void set_losestreak(int new_ls) {
+	public void set_losestreak(int new_ls) 
+	{
 		lose_streak = new_ls;
 	}
 	
-	public int get_losestreak() {
+	public int get_losestreak() 
+	{
 		return lose_streak;
 	}
 	
-	// simulation start method
-	public void start() {
-		// get user input
+	// Start method
+	public void start() 
+	{
+		// Get user input
 		Scanner reader = new Scanner(System.in);
 		System.out.println("Welcome to SimCraps! Enter your user name: ");
 		set_UserName(reader.nextLine());
 		System.out.println("Hello " + get_UserName() + "!");
 		System.out.println("Enter the amount of money you will bring to the table: ");
 		set_balance(reader.nextInt());
-		System.out.println("Enter the bet amount between $1 and $" + Integer.toString(get_balance()) + ": ");
 		
-		// start simulation
-		while(get_balance() != 0) {
-			set_bet(reader.nextInt());
-			int b = get_bet();
-			int current_balance = get_balance();
-			if (b >= 1 && b <= current_balance) {
-				System.out.println(get_UserName() + " bets $" + b);
-				boolean result = c_game.playGame();
-				if (result == true) {
-					set_balance(current_balance + b);
-				}
-				else {
-					set_balance(current_balance - b);
-				}
-				
-				System.out.println(get_UserName() + "'s balance: " + get_balance());
-			}
-			else {
-				System.out.println("Invalid bet! Please enter a bet between $1 and $" + Integer.toString(get_balance()) + ": ");
+		int win_streak = 0;
+		int lose_streak = 0;
+		int game_num = 1;
+		
+		// Start a simulation
+		while(get_balance() != 0) 
+		{
+			if (get_bet() == 0) 
+			{
+				System.out.println("Enter the bet amount between $1 and $" + Integer.toString(get_balance()) + ": ");
+				set_bet(reader.nextInt());
 			}
 			
-			if (get_balance() != 0) {
-				System.out.println("Playing a new game...");
+			int b = get_bet();
+			
+			
+			int current_balance = get_balance();
+			
+			if (current_balance < b)
+			{
+				b = current_balance;
+			}
+		
+			
+			if (b >= 1 && b <= current_balance) 
+			{
+				System.out.println(get_UserName() + " bets $" + b);
+				boolean result = cg.playGame();
+				cmm.updateGamesPlayed();
+				
+				
+				if (result == true) 
+				{
+					set_balance(current_balance + b);
+					cmm.updateGamesWon();
+					
+					cmm.updateMaxLoseStreak(lose_streak);
+					lose_streak = 0;
+					win_streak++;
+					cmm.updateMaxWinStreak(win_streak);
+				}
+				else 
+				{
+					set_balance(current_balance - b);
+					cmm.updateGamesLost();
+					
+					cmm.updateMaxWinStreak(win_streak);
+					win_streak = 0;
+					lose_streak++;
+					cmm.updateMaxLoseStreak(lose_streak);
+				}
+				
+				
+				if (get_balance() != 0)
+				{
+					System.out.println(get_UserName() + "'s balance: $" + get_balance() + ".Playing a new game...");
+				}
+				
+				else
+				{
+					System.out.println(get_UserName() + "'s balance: $" + get_balance());
+					
+					cmm.printStatistics();
+					
+					Scanner replayReader = new Scanner(System.in);
+					System.out.println("Replay? Enter 'y' or 'n': ");
+					String answer = replayReader.nextLine();
+					if (answer.equals("y"))
+					{
+						set_bet(0);
+						start();
+					}
+					
+					replayReader.close();
+				}
+				
+				game_num = game_num + 1;
+				cmm.updateMaxBalanceAndGame(get_balance(), game_num);
+			}
+			
+			else 
+			{
+				System.out.println("Invalid bet! Please enter a bet between $1 and $" + Integer.toString(get_balance()) + ": ");
 			}
 		}
 		
 		reader.close();
+		
 	}
 }

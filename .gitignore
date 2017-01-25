@@ -8,3 +8,4 @@
 /RemoteSystemsTempFiles
 /.metadata
 /.recommenders
+**/bin
