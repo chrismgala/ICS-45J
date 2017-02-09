@@ -1,6 +1,11 @@
 // CrapsSimulation.java
+// Contains all the variables and methods for a new simulation.
+// Keeps track of simulation stats like win & lose streaks, balances, and the ongoing bet.
+// Each time a new CrapsSimulation is started (through start()), user input is collected.
+// A new CrapsMetricsMonitor is also created to maintain and update stats throughout each simulation.
+
 // Chris Gala 64338761
-// Wai Phyo
+// Wai Phyo 60902242
 
 import java.util.Scanner;
 
@@ -111,8 +116,8 @@ public class CrapsSimulation
 		System.out.println("Enter the amount of money you will bring to the table: ");
 		set_balance(reader.nextInt());
 		
-		int win_streak = 0;
-		int lose_streak = 0;
+		win_streak = 0;
+		lose_streak = 0;
 		int game_num = 1;
 		
 		// Start a simulation
@@ -129,7 +134,7 @@ public class CrapsSimulation
 			
 			int current_balance = get_balance();
 			
-			if (current_balance < b)
+			if (current_balance < b && game_num > 1)
 			{
 				b = current_balance;
 			}
@@ -178,9 +183,10 @@ public class CrapsSimulation
 					Scanner replayReader = new Scanner(System.in);
 					System.out.println("Replay? Enter 'y' or 'n': ");
 					String answer = replayReader.nextLine();
-					if (answer.equals("y"))
+					if (answer.equals("y") || answer.equals("Y"))
 					{
 						set_bet(0);
+						cmm.reset();
 						start();
 					}
 					
@@ -194,6 +200,7 @@ public class CrapsSimulation
 			else 
 			{
 				System.out.println("Invalid bet! Please enter a bet between $1 and $" + Integer.toString(get_balance()) + ": ");
+				set_bet(reader.nextInt());
 			}
 		}
 		

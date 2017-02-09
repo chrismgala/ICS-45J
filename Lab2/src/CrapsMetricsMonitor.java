@@ -1,6 +1,10 @@
 // CrapsMetricsMonitor.java
+// This is where all statistics are kept track of. All statistics variables are here and all methods
+// for updating and getting them are here as well. The reset() method allows for a fresh CrapsMetricsMonitor
+// everytime the user wants to replay and start an entirely new simulation.
+
 // Chris Gala 64338761
-// Wai Phyo
+// Wai Phyo 60902242
 
 public class CrapsMetricsMonitor
 {
@@ -151,5 +155,19 @@ public class CrapsMetricsMonitor
 		System.out.println("Maximum Winning Streak: " + Integer.toString(max_win_streak));
 		System.out.println("Maximum Loosing Streak: " + Integer.toString(max_lose_streak));
 		System.out.println("Maximum balance: " + Integer.toString(max_balance) + " during game " + Integer.toString(game_num_of_max_balance));
+	}
+	
+	public void reset()
+	{
+		games_played = 0;
+		games_won = 0;
+		games_lost = 0;
+		max_rolls = 0;
+		natural_count = 0;
+		craps_count = 0;
+		max_win_streak = 0;
+		max_lose_streak = 0;
+		max_balance = 0;
+		game_num_of_max_balance = 0;
 	}
 }

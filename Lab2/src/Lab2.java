@@ -1,6 +1,8 @@
 // Lab2.java (Main)
+// Creates a new simulation and starts it.
+
 // Chris Gala 64338761
-// Wai Phyo
+// Wai Phyo 60902242
 
 public class Lab2
 {

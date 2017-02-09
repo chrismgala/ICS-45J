@@ -1,24 +1,21 @@
 // CrapsGame.java
+// This is where a game is played. Only one stat is kept track of from game to game, which is the number of rolls.
+// The logic for a passline bet version of Craps is here. The main method (playGame()) returns whether or not the player
+// won the game. It is continuously called as long as the user wants to keep playing.
+
 // Chris Gala 64338761
-// Wai Phyo
+// Wai Phyo 60902242
 
 import java.util.*;
 
 public class CrapsGame
 {
-	private static Map<Integer, Integer> num_of_rolls;
+	private static int num_of_rolls;
 	private static CrapsMetricsMonitor cmm;
 	
 	// Constructor
 	public CrapsGame(CrapsMetricsMonitor monitor) 
 	{
-		num_of_rolls = new HashMap<Integer, Integer>();
-		
-		for (int i = 2; i <= 12; i++) 
-		{
-			num_of_rolls.put(i, 0);
-		}
-		
 		cmm = monitor;
 	}
 	
@@ -27,9 +24,8 @@ public class CrapsGame
 		boolean first_roll = true;
 		int roll = 0;
 		int point = 0;
-		
+		num_of_rolls = 0;
 		// Statistics to keep track of
-		int rolls = 0;
 		
 		Random rand = new Random();
 		
@@ -37,10 +33,8 @@ public class CrapsGame
 		{
 			roll = rand.nextInt(11) + 2;
 			System.out.println("Rolled a " + Integer.toString(roll));
-			rolls++;
-			
-			cmm.updateMaxRolls(rolls);
-			num_of_rolls.put(roll, num_of_rolls.get(roll) + 1);
+			num_of_rolls++;
+			cmm.updateMaxRolls(num_of_rolls);
 			
 			if (first_roll == true)
 			{
