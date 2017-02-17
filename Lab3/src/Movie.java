@@ -31,8 +31,8 @@ public class Movie
 
 			// Make sure renter is not already renting this movie
 			if (this.rentedMovieCopies > 0){
-				for (Renter r : renters){
-					if (r.getRenterId() == new_renter.getRenterId())
+				for (int i = 0; i < rentedMovieCopies; i++){
+					if (renters[i].getRenterId() == new_renter.getRenterId())
 					{
 						throw new myexceptions.DuplicateRenterException();
 					}
@@ -42,7 +42,7 @@ public class Movie
 			int index = -1;
 			for (int i = 0; i < rentedMovieCopies; i++){
 				int compare = renters[i].getLastName().compareTo(new_renter.getLastName());
-				if (compare < 0){
+				if (compare > 0){
 					index = i;
 				}
 				else if (compare == 0){
@@ -56,16 +56,17 @@ public class Movie
 					}
 				}
 			}
+			System.out.println(Integer.toString(this.rentedMovieCopies));
 			if (index == -1) {
 				renters[rentedMovieCopies] = new_renter;
 			} else {
 				// shift all renters
-				for (int i = index; index < rentedMovieCopies; i++){
+				for (int i = index; i < this.rentedMovieCopies; i++){
 					renters[i+1] = renters[i];
 				}
 				renters[index] = new_renter;
 			}
-			rentedMovieCopies++;
+			this.rentedMovieCopies++;
 		}
 		
 		catch (myexceptions.DuplicateRenterException e)
