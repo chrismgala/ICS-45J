@@ -1,5 +1,7 @@
 // MovieManagerUI.java
-
+// This class represents the UI / command-line interface for the program.
+// For example, the menu is printed through printMenu and commands are received through getCommand.
+// Some custom methods are written for getting the Movie Code, Movie Name, Renter ID, Renter First Name, and Renter Last Name.
 
 // Chris Gala 64338761
 // Wai Phyo 60902242
@@ -8,8 +10,8 @@ import java.util.Scanner;
 
 public class MovieManagerUI
 {
-	// custom exceptions
 	
+	// This method prints out the Movie Manager menu and all of the available commands for the user.
 	public static void printMenu()
 	{
 		System.out.println("Welcome to Movie Manager!");
@@ -25,73 +27,178 @@ public class MovieManagerUI
 		System.out.println("Enter Command:");
 	}
 	
-	public static String getCommand(){
+	// This method gets input from the user as to which command they want to execute. If the user inputs
+	// an invalid command, the menu is reprinted.
+	public static String getCommand()
+	{
 		Scanner reader = new Scanner(System.in);
-		while (true) {
+		while (true) 
+		{
 			String command = reader.nextLine().toLowerCase();
-			if (command.equals("am") || command.equals("dm") || command.equals("rm") || command.equals("rr") || command.equals("p") || command.equals("q")) {
+			if (command.equals("am") || command.equals("dm") || command.equals("rm") || command.equals("rr") || command.equals("p") || command.equals("q")) 
+			{
 				//reader.close();
 				return command;
 			}
-			else {
+			
+			else 
+			{
 				System.out.println("Invalid command. Please try again.");
 			}
 		}
 	}
 	
-	public static String getMovieInfo() {
+	// This method prompts the user for and returns the Movie code.
+	// If the user enters a blank String, throw an exception and handle it in the catch block of the
+	// try / catch statement.
+	public static String getMovieCode() 
+	{
 		Scanner reader = new Scanner(System.in);
-		System.out.println("Please provide movie info (code/name): ");
-		while (true){
-			try{
-				String movie_info = reader.nextLine();
-				if (movie_info.equals("")){
+		System.out.println("Please provide movie code: ");
+		while (true)
+		{
+			try
+			{
+				String movieCode = reader.nextLine();
+				if (movieCode.equals(""))
+				{
 					throw new myexceptions.EmptyMovieInfoException();
 				}
-				else {
+				
+				else 
+				{
 					//reader.close();
-					return movie_info;
+					return movieCode;
 				}
-			} catch (myexceptions.EmptyMovieInfoException e){
-				System.out.println("Empty movie info... please try again.");
+			} 
+			
+			catch (myexceptions.EmptyMovieInfoException e)
+			{
+				System.out.println(e + ": Empty movie code... please try again.");
 			}
 		}		
 	}
 	
-	public static String getRenterInfo() {
+	// This method prompts the user for and returns the Movie name.
+	// If the user enters a blank String, throw an exception and handle it in the catch block of the
+	// try / catch statement.
+	public static String getMovieName() 
+	{
 		Scanner reader = new Scanner(System.in);
-		System.out.println("Please provide renter info (first and last): ");
-		while (true){
-			try{
-				String renter_info = reader.nextLine();
-				if (renter_info.equals("")){
+		System.out.println("Please provide movie name: ");
+		while (true)
+		{
+			try
+			{
+				String movieName = reader.nextLine();
+				if (movieName.equals(""))
+				{
+					throw new myexceptions.EmptyMovieInfoException();
+				}
+				
+				else 
+				{
+					//reader.close();
+					return movieName;
+				}
+			} 
+			
+			catch (myexceptions.EmptyMovieInfoException e)
+			{
+				System.out.println(e + ": Empty movie name... please try again.");
+			}
+		}		
+	}
+	
+	// This method prompts the user for and returns the Renter's first name.
+	// If the user enters a blank String, throw an exception and handle it in the catch block of the
+	// try / catch statement.
+	public static String getRenterFirstName() 
+	{
+		Scanner reader = new Scanner(System.in);
+		System.out.println("Please provide renter first name: ");
+		while (true)
+		{
+			try
+			{
+				String renterFirstName = reader.nextLine();
+				if (renterFirstName.equals(""))
+				{
 					throw new myexceptions.EmptyRenterNameException();
 				}
-				else {
+				
+				else 
+				{
 					//reader.close();
-					return renter_info;
+					return renterFirstName;
 				}
-			} catch (myexceptions.EmptyRenterNameException e){
-				System.out.println("Empty renter info... please try again.");
+			} 
+			
+			catch (myexceptions.EmptyRenterNameException e)
+			{
+				System.out.println(e + ": Empty renter first name... please try again.");
 			}
 		}
 	}
 	
-	public static int getRenterId() {
+	// This method prompts the user for and returns the Renter's last name.
+	// If the user enters a blank String, throw an exception and handle it in the catch block of the
+	// try / catch statement.
+	public static String getRenterLastName() 
+	{
 		Scanner reader = new Scanner(System.in);
-		System.out.println("Please provide renter ID: ");
-		while (true){
-			try{
-				int renter_id = reader.nextInt();
-				if (renter_id <= 0){
+		System.out.println("Please provide renter last name: ");
+		while (true)
+		{
+			try
+			{
+				String renterLastName = reader.nextLine();
+				if (renterLastName.equals(""))
+				{
+					throw new myexceptions.EmptyRenterNameException();
+				}
+				
+				else 
+				{
+					//reader.close();
+					return renterLastName;
+				}
+			} 
+			
+			catch (myexceptions.EmptyRenterNameException e)
+			{
+				System.out.println(e + ": Empty renter first name... please try again.");
+			}
+		}
+	}
+	
+	// This method prompts the user for and returns the Renter's id.
+	// If the user enters a blank String, throw an exception and handle it in the catch block of the
+	// try / catch statement.
+	public static int getRenterId() 
+	{
+		Scanner reader = new Scanner(System.in);
+		System.out.println("Please provide renter id: ");
+		while (true)
+		{
+			try
+			{
+				int renterId = reader.nextInt();
+				if (renterId <= 0)
+				{
 					throw new myexceptions.InvalidRenterIDException();
 				}
-				else {
+				
+				else 
+				{
 					//reader.close();
-					return renter_id;
+					return renterId;
 				}
-			} catch (myexceptions.InvalidRenterIDException e){
-				System.out.println("Invalid renter ID... please try again.");
+			} 
+			
+			catch (myexceptions.InvalidRenterIDException e)
+			{
+				System.out.println(e + ": Invalid renter ID... please try again.");
 			}
 		}
 	}

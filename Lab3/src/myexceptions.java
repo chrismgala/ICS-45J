@@ -1,3 +1,11 @@
+// myexceptions.java
+// All custom exceptions are included in this class.
+// This includes exceptions for Boundary and Error test cases.
+// Custom messages for each exception are called in the 'catch' block of MovieManager and Movie classes.
+
+// Chris Gala 64338761
+// Wai Phyo 60902242
+
 public class myexceptions
 {
 	public static class DuplicateMovieException extends Exception {
