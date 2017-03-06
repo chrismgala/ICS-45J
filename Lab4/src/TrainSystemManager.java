@@ -6,11 +6,16 @@
 
 public class TrainSystemManager
 {
-	private TrainStation[] trainStations;
+	public TrainStation[] trainStations;
 	
 	public TrainSystemManager()
 	{
 		this.setTrainStations(new TrainStation[5]);
+		
+		for (int i = 0; i < 5; i++)
+		{
+			this.trainStations[i] = new TrainStation();
+		}
 	}
 
 	public TrainStation[] getTrainStations()

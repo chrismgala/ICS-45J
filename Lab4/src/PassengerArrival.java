@@ -19,12 +19,12 @@ public class PassengerArrival
 		this.expectedTimeOfArrival = 0;
 	}
 	
-	public PassengerArrival(int numPassengers, int destinationTrainStation, int timePeriod, int expectedTimeOfArrival)
+	public PassengerArrival(int numPassengers, int originTrainStation, int destinationTrainStation, int timePeriod)
 	{
 		this.numPassengers = numPassengers;
 		this.destinationTrainStation = destinationTrainStation;
 		this.timePeriod = timePeriod;
-		this.expectedTimeOfArrival = expectedTimeOfArrival;
+		this.expectedTimeOfArrival = this.timePeriod + 10 + (5 * (Math.abs(originTrainStation - destinationTrainStation) - 1)) + 10;
 	}
 
 	public int getNumPassengers()

@@ -11,14 +11,14 @@ public class TrainEvent
 	
 	public TrainEvent()
 	{
-		this.setDestination(0);
-		this.setExpectedArrival(0);
+		this.destination = 0;
+		this.expectedArrival = 0;
 	}
 	
 	public TrainEvent(int destination, int expectedArrival)
 	{
-		this.setDestination(destination);
-		this.setExpectedArrival(expectedArrival);
+		this.destination = destination;
+		this.expectedArrival = expectedArrival;
 	}
 
 	public int getDestination()

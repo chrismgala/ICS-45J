@@ -13,10 +13,10 @@ public class TrainStation
 	
 	public TrainStation()
 	{
-		this.totalDestinationRequests = new int[10];
-		this.arrivedPassengers = new int[10];
-		this.passengerRequests = new int[10];
-		this.approachingTrain = 0;
+		this.totalDestinationRequests = new int[5];
+		this.arrivedPassengers = new int[5];
+		this.passengerRequests = new int[5];
+		this.approachingTrain = -1;
 	}
 	
 	public int[] getTotalDestinationRequests()

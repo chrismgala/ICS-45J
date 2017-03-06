@@ -4,9 +4,12 @@
 // Chris Gala 64338761
 // Wai Phyo 60902242
 
+import java.lang.*;
+
 public class Lab4
 {
-	public static void main(String[] args) 
+	
+	public static void main(String[] args)
 	{
 		TrainSimulation ts = new TrainSimulation();
 		ts.start();
