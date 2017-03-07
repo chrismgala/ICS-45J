@@ -39,6 +39,7 @@ public class TrainSimulation
 	private TrainSystemManager tsm;
 	
 	ArrayList< ArrayList<PassengerArrival> > passengerArrivals = new ArrayList< ArrayList<PassengerArrival> >();
+	ArrayList<Train> trains = new ArrayList<Train>();
 	
 	public TrainSimulation()
 	{
@@ -95,40 +96,52 @@ public class TrainSimulation
 		Train t3 = new Train(3, tsm);
 		Train t4 = new Train(4, tsm);
 		
-		t0.start();
-		t1.start();
-		t2.start();
-		t3.start();
-		t4.start();
+		trains.add(t0);
+		trains.add(t1);
+		trains.add(t2);
+		trains.add(t3);
+		trains.add(t4);
 		
+		for (Train t : trains)
+		{
+			t.start();
+		}
 		
-//		while (SimClock.getTime() <= totalSimulationTime)
-//		{		
-//			if (System.currentTimeMillis() - currentSystemTime >= simulatedSecondRate) 
-//			{
-//				SimClock.tick();
-//				currentSystemTime = System.currentTimeMillis();	
-//
-//				// DEBUGGING PURPOSES
-//				System.out.println(Integer.toString(SimClock.getTime()));
-//				
-//				// NOW MANAGE PASSENGER BEHAVIOR
-//				// Iterate through passengerArrivals
-//				for (ArrayList<PassengerArrival> al : passengerArrivals)
-//				{
-//					for (PassengerArrival pa : al)
-//					{
-//						if (SimClock.getTime() > 0 && SimClock.getTime() % pa.getTimePeriod() == 0)
-//						{
-//							TrainEvent te = t1.createTrainEvent(pa.getDestinationTrainStation(), pa.getExpectedTimeOfArrival());
-//							this.tsm.trainStations[pa.getDestinationTrainStation()].setApproachingTrain(t1.getTrainID());
-//							
-//							
-//						}
-//					}
-//				}
-//			}
-//		}
+		while (SimClock.getTime() <= totalSimulationTime)
+		{		
+			if (System.currentTimeMillis() - currentSystemTime >= simulatedSecondRate) 
+			{
+				SimClock.tick();
+				currentSystemTime = System.currentTimeMillis();	
+
+				// DEBUGGING PURPOSES
+				System.out.println(Integer.toString(SimClock.getTime()));
+				
+				// NOW MANAGE PASSENGER BEHAVIOR
+				// Iterate through passengerArrivals
+				for (ArrayList<PassengerArrival> al : passengerArrivals)
+				{
+					for (PassengerArrival pa : al)
+					{
+						if (SimClock.getTime() > 0 && SimClock.getTime() % pa.getTimePeriod() == 0)
+						{
+							for (Train t : trains)
+							{
+								if (t.isBusy())
+								{
+									TrainEvent te = t.createTrainEvent(pa.getDestinationTrainStation(), SimClock.getTime() + pa.getTravelTime());
+									
+									t.setNumPassengers(pa.getNumPassengers());
+									t.addTotalLoadedPassengers(pa.getNumPassengers());
+									
+									this.tsm.trainStations[pa.getDestinationTrainStation()].setApproachingTrain(t.getTrainID());
+								}
+							}
+						}
+					}
+				}
+			}
+		}
 	}
 	
 	public void printTrainState()

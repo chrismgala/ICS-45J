@@ -9,14 +9,14 @@ public class PassengerArrival
 	private int numPassengers;
 	private int destinationTrainStation;
 	private int timePeriod;
-	private int expectedTimeOfArrival;
+	private int travelTime;
 
 	public PassengerArrival()
 	{
 		this.numPassengers = 0;
 		this.destinationTrainStation = 0;
 		this.timePeriod = 0;
-		this.expectedTimeOfArrival = 0;
+		this.travelTime = 0;
 	}
 	
 	public PassengerArrival(int numPassengers, int originTrainStation, int destinationTrainStation, int timePeriod)
@@ -24,7 +24,7 @@ public class PassengerArrival
 		this.numPassengers = numPassengers;
 		this.destinationTrainStation = destinationTrainStation;
 		this.timePeriod = timePeriod;
-		this.expectedTimeOfArrival = this.timePeriod + 10 + (5 * (Math.abs(originTrainStation - destinationTrainStation) - 1)) + 10;
+		this.travelTime = this.timePeriod + 10 + (5 * (Math.abs(originTrainStation - destinationTrainStation) - 1)) + 10;
 	}
 
 	public int getNumPassengers()
@@ -57,13 +57,15 @@ public class PassengerArrival
 		this.timePeriod = timePeriod;
 	}
 
-	public int getExpectedTimeOfArrival()
+	public int getTravelTime()
 	{
-		return expectedTimeOfArrival;
+		return travelTime;
 	}
 
-	public void setExpectedTimeOfArrival(int expectedTimeOfArrival)
+	public void setTravelTime(int travelTime)
 	{
-		this.expectedTimeOfArrival = expectedTimeOfArrival;
+		this.travelTime = travelTime;
 	}
+
+	
 }

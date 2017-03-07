@@ -35,20 +35,35 @@ public class Train implements Runnable
 	{
 		// Should continuously loop and process trainEvents in the moveQueue.
 		System.out.println("Running " +  Integer.toString(this.trainID) );
-	      try {
-	         for(int i = 4; i > 0; i--) {
-	            System.out.println("Thread: " + Integer.toString(this.trainID) + ", " + i);
-	            Thread.sleep(0);
-	         }
-	      }catch (InterruptedException e) {
-	         System.out.println("Thread " +  Integer.toString(this.trainID) + " interrupted.");
-	      }
-	      System.out.println("Thread " +  Integer.toString(this.trainID) + " exiting.");
+		try 
+		{
+			synchronized(this)
+			{
+				Thread.sleep(0);
+				while(true) 
+		        {
+		           if (this.numPassengers == 0 && moveQueue.size() > 0)
+		           {
+		           	TrainEvent toRun = moveQueue.get(moveQueue.size() - 1);
+		           	
+		           	// do nothing while the train is busy
+		           	while(SimClock.getTime() != toRun.getExpectedArrival()) {}
+		           	
+		           	this.currentTrainStation = toRun.getDestination();
+		           }
+		        }
+			}
+			
+		}
+		catch (InterruptedException e) 
+		{
+			System.out.println("Train " +  Integer.toString(this.trainID) + " interrupted.");
+		}
+		System.out.println("Train " +  Integer.toString(this.trainID) + " exiting.");
 	}
 	
 	public void start()
 	{
-		System.out.println("Starting Train " +  Integer.toString(this.trainID) );
 		if (t == null) 
 		{
 			t = new Thread (this, Integer.toString(this.trainID));
@@ -67,6 +82,11 @@ public class Train implements Runnable
 	public void updateMoveQueue()
 	{
 		
+	}
+	
+	public boolean isBusy()
+	{
+		return this.numPassengers != 0;
 	}
 	
 	public int getTrainID()
@@ -104,9 +124,9 @@ public class Train implements Runnable
 		return totalLoadedPassengers;
 	}
 
-	public void setTotalLoadedPassengers(int totalLoadedPassengers)
+	public void addTotalLoadedPassengers(int passengers)
 	{
-		this.totalLoadedPassengers = totalLoadedPassengers;
+		this.totalLoadedPassengers += passengers;
 	}
 
 	public int getTotalUnloadedPassengers()
@@ -114,9 +134,9 @@ public class Train implements Runnable
 		return totalUnloadedPassengers;
 	}
 
-	public void setTotalUnloadedPassengers(int totalUnloadedPassengers)
+	public void addTotalUnloadedPassengers(int passengers)
 	{
-		this.totalUnloadedPassengers = totalUnloadedPassengers;
+		this.totalUnloadedPassengers += passengers;
 	}
 
 	public ArrayList<TrainEvent> getMoveQueue()
