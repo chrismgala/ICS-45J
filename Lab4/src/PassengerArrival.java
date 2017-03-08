@@ -7,6 +7,7 @@
 public class PassengerArrival
 {
 	private int numPassengers;
+	private int originTrainStation;
 	private int destinationTrainStation;
 	private int timePeriod;
 	private int travelTime;
@@ -22,9 +23,10 @@ public class PassengerArrival
 	public PassengerArrival(int numPassengers, int originTrainStation, int destinationTrainStation, int timePeriod)
 	{
 		this.numPassengers = numPassengers;
+		this.originTrainStation = originTrainStation;
 		this.destinationTrainStation = destinationTrainStation;
 		this.timePeriod = timePeriod;
-		this.travelTime = this.timePeriod + 10 + (5 * (Math.abs(originTrainStation - destinationTrainStation) - 1)) + 10;
+		this.travelTime = 10 + (5 * (Math.abs(originTrainStation - destinationTrainStation) - 1)) + 10;
 	}
 
 	public int getNumPassengers()
@@ -65,6 +67,16 @@ public class PassengerArrival
 	public void setTravelTime(int travelTime)
 	{
 		this.travelTime = travelTime;
+	}
+
+	public int getOriginTrainStation()
+	{
+		return originTrainStation;
+	}
+
+	public void setOriginTrainStation(int originTrainStation)
+	{
+		this.originTrainStation = originTrainStation;
 	}
 
 	

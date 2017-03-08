@@ -79,9 +79,9 @@ public class Train implements Runnable
 		return new TrainEvent(destination, expectedArrival);
 	}
 	
-	public void updateMoveQueue()
+	public int calculateTravelTime(int passengerTrainStation)
 	{
-		
+		return (5 * (Math.abs(passengerTrainStation - this.currentTrainStation) - 1));
 	}
 	
 	public boolean isBusy()

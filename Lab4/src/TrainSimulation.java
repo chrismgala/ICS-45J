@@ -127,14 +127,31 @@ public class TrainSimulation
 						{
 							for (Train t : trains)
 							{
-								if (t.isBusy())
+								if (!t.isBusy())
 								{
-									TrainEvent te = t.createTrainEvent(pa.getDestinationTrainStation(), SimClock.getTime() + pa.getTravelTime());
+									System.out.println("Assigning passenger pickup from Station " + Integer.toString(pa.getOriginTrainStation()) + " to Station " + Integer.toString(pa.getDestinationTrainStation()) + " to Train " + Integer.toString(t.getTrainID() + 1));
+									System.out.println("Passenger travel time: " + Integer.toString(pa.getTravelTime()));
+									System.out.println("SimClock: " + Integer.toString(SimClock.getTime()));
+									
+									TrainEvent te = null;
+									
+									if (t.getCurrentTrainStation() == pa.getOriginTrainStation()) 
+									{
+										te = t.createTrainEvent(pa.getDestinationTrainStation(), SimClock.getTime() + pa.getTravelTime());
+									}
+									
+									else 
+									{
+										te = t.createTrainEvent(pa.getDestinationTrainStation(), SimClock.getTime() + pa.getTravelTime() + t.calculateTravelTime(pa.getOriginTrainStation()));
+									}
+									
+									System.out.println("Train " + Integer.toString(t.getTrainID() + 1) + " will finish at " +  Integer.toString(te.getExpectedArrival()) + " Simulated Seconds");
 									
 									t.setNumPassengers(pa.getNumPassengers());
 									t.addTotalLoadedPassengers(pa.getNumPassengers());
 									
 									this.tsm.trainStations[pa.getDestinationTrainStation()].setApproachingTrain(t.getTrainID());
+									break;
 								}
 							}
 						}
