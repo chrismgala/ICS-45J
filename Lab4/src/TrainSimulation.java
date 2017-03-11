@@ -150,7 +150,7 @@ public class TrainSimulation
 					this.tsm.trainStations[ori].totalDestinationRequests[dst] += 1;
 					// update current number of passengers who have requested to go to dst train station
 					this.tsm.trainStations[ori].passengerRequests[dst] += 1;
-					System.out.println("Passenger arrived at Train Station " + Integer.toString(ori) + " wanting to go to " + Integer.toString(dst));
+					System.out.println("Passenger arrived at Station #" + Integer.toString(ori) + " wanting to go to Station #" + Integer.toString(dst));
 
 					
 					// remove event
