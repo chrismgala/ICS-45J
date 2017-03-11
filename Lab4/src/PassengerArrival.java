@@ -4,6 +4,8 @@
 // Chris Gala 64338761
 // Wai Phyo 60902242
 
+import java.util.*;
+
 public class PassengerArrival
 {
 	private int numPassengers;
@@ -11,7 +13,7 @@ public class PassengerArrival
 	private int destinationTrainStation;
 	private int timePeriod;
 	private int travelTime;
-
+	private ArrayList<Integer> arrivalTimes = new ArrayList<Integer>();
 	public PassengerArrival()
 	{
 		this.numPassengers = 0;
@@ -27,8 +29,31 @@ public class PassengerArrival
 		this.destinationTrainStation = destinationTrainStation;
 		this.timePeriod = timePeriod;
 		this.travelTime = 10 + (5 * (Math.abs(originTrainStation - destinationTrainStation) - 1)) + 10;
+		generateArrivalTimes();
 	}
-
+	
+	public void generateArrivalTimes()
+	{
+		// use poison point process to generate all passenger arrival times at a station
+		int start = 0;
+		double avg_occ = this.numPassengers/(double)timePeriod;
+		while (true){
+			double u = Math.random();
+			double t_arr = -Math.log(u)/avg_occ;
+			int rt = (int) Math.round(t_arr);
+			start += rt;
+			if (start > 1000){
+				break;
+			}
+			arrivalTimes.add(start);
+		}
+	}
+	
+	public ArrayList<Integer> getArrivalTimes()
+	{
+		return this.arrivalTimes;
+	}
+	
 	public int getNumPassengers()
 	{
 		return numPassengers;

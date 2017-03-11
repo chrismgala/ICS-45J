@@ -6,10 +6,10 @@
 
 public class TrainStation
 {
-	private int[] totalDestinationRequests;
-	private int[] arrivedPassengers;
-	private int[] passengerRequests;
-	private int approachingTrain;
+	public int[] totalDestinationRequests;
+	public int[] arrivedPassengers;
+	public int[] passengerRequests;
+	public int approachingTrain;
 	
 	public TrainStation()
 	{

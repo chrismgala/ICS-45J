@@ -4,8 +4,6 @@
 // Chris Gala 64338761
 // Wai Phyo 60902242
 
-import java.lang.*;
-
 public class Lab4
 {
 	
