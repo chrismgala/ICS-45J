@@ -32,6 +32,7 @@ public class Train extends Thread
 		this.currentTrainStation = 0;
 		this.numPassengers = 0;
 		this.manager = manager;
+		this.passengerDestinations = new int[5];
 	}
 	
 	public void run()
@@ -54,50 +55,58 @@ public class Train extends Thread
 			
 			if (!this.moveQueue.isEmpty())
 			{
-//				// process all events in the move queue and find which dst is the closest to current destination
-//				int te_index = this.get_closest_dst_trainstation();
-//				TrainEvent toRun = this.moveQueue.get(te_index);
-//				System.out.println("Train " + Integer.toString(this.trainID) + " is moving to " + toRun.getDestination() + " at expected Arrival Time: " + Integer.toString(toRun.getExpectedArrival()));
+				this.lock.lock();
+				
+				// get first event to process
 				TrainEvent toRun = this.moveQueue.get(0);
-				System.out.println("Train " + Integer.toString(this.trainID) + " is moving to " + toRun.getDestination() + " at expected Arrival Time: " + Integer.toString(toRun.getExpectedArrival()));
 				
-				// do nothing while the train is driving to the dst
-//				this.lock.lock();
-//				while (SimClock.getTime() != toRun.getExpectedArrival())
-//				{
-//					this.sleep(millis);
-//				}
-//				this.lock.unlock();
-				int curr_sim_time = SimClock.getTime();
-				try {
-					Thread.sleep(Math.round(toRun.getExpectedArrival()*100) - curr_sim_time*100);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				System.out.println("Train " + Integer.toString(this.trainID) + " has arrived at " + toRun.getDestination());
-				
-				// train has arrived... update current train station & check number of passengers to unload & filter the moveQueue
-				this.currentTrainStation = toRun.getDestination();
-				this.moveQueue.remove(0);
-				
-				// first unload passengers that wants to get off at current station
-				int num_to_unload = this.num_passengers_to_unload();
-				if (num_to_unload > 0)
+				// if train is already at the train station
+				if (this.currentTrainStation == toRun.getOrigination())
 				{
-					this.setNumPassengers(this.getNumPassengers() - num_to_unload);
-//					this.filter_moveQueue();
-					System.out.println("UNLOADED: Train " + Integer.toString(this.trainID) + " has now a total of " + Integer.toString(this.getNumPassengers()) + " passengers");
+					// does anyone want to get off the train?
+					int num_to_unload = this.passengerDestinations[this.currentTrainStation];
+					if (num_to_unload > 0)
+					{
+						this.setNumPassengers(this.getNumPassengers() - num_to_unload);
+						this.passengerDestinations[this.currentTrainStation] -= num_to_unload;
+						System.out.println("UNLOADED (case 1): Train " + Integer.toString(this.trainID) + " has now a total of " + Integer.toString(this.getNumPassengers()) + " passengers");
+						this.moveQueue.remove(0);
+					}
+					
+					// does anyone want to get on the train?
+					int num_to_load = this.num_passengers_to_load();
+					if (num_to_load > 0)
+					{
+						this.setNumPassengers(this.getNumPassengers() + num_to_load);
+						System.out.println("LOADED (case 1): Train " + Integer.toString(this.trainID) + " has now a total of " + Integer.toString(this.getNumPassengers()) + " passengers");
+						this.load_passengers();
+						this.manager.trainStations[this.currentTrainStation].setApproachingTrain(-1);
+					}
 				}
-				
-				int num_to_load = this.num_passengers_to_load();
-				if (num_to_load > 0)
+				else 
 				{
-					this.setNumPassengers(this.getNumPassengers() + num_to_load);
-//					this.filter_moveQueue();
-					System.out.println("LOADED: Train " + Integer.toString(this.trainID) + " has now a total of " + Integer.toString(this.getNumPassengers()) + " passengers");
+					// we need to go to another train station to pick up passengers
+					int curr_sim_time = SimClock.getTime();
+					int expected_travel_time = curr_sim_time + this.calculateTravelTime(toRun.getOrigination());
+
+					System.out.println("Train " + Integer.toString(this.trainID) + " is moving to " + Integer.toString(toRun.getOrigination()) + 
+							" from " + Integer.toString(this.currentTrainStation) + " at expected Arrival Time: " + Integer.toString(expected_travel_time));
+					
+					// do nothing while the train is driving to the dst
+					try {
+						Thread.sleep(Math.round(expected_travel_time*100) - curr_sim_time*100);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+					// alert that train has arrived
+					System.out.println("Train " + Integer.toString(this.trainID) + " has arrived at " + toRun.getOrigination());
+					
+					// train has arrived... update current train station
+					this.currentTrainStation = toRun.getOrigination();
 				}
-				this.manager.trainStations[this.currentTrainStation].setApproachingTrain(-1);
+				this.lock.unlock();
 			}
 	    }
 	}
@@ -123,16 +132,13 @@ public class Train extends Thread
 				{
 					int curr_pass_requests = this.manager.trainStations[i].passengerRequests[j];
 					int heading_train = this.manager.trainStations[i].getApproachingTrain();
-					
-					// if there are passengers at the station and there aren't any trains heading to said train station
+					// if there are passengers at the station -- create a train event to go to that station
 					if (curr_pass_requests > 0 && heading_train == -1)
 					{
 						this.manager.trainStations[i].setApproachingTrain(this.trainID);
 						int expected_arrival_time = SimClock.getTime() + this.calculateTravelTime(i);
-						this.createTrainEvent(i, expected_arrival_time, curr_pass_requests);
+						this.createTrainEvent(i, j, expected_arrival_time, curr_pass_requests);
 						assigned = true;
-						this.manager.trainStations[i].passengerRequests[j] = 0;
-//						System.out.println("Assigned!");
 						break;
 					}
 				}
@@ -153,18 +159,21 @@ public class Train extends Thread
 		}
 		return total;
 	}
-	public int num_passengers_to_unload()
+	
+	public void load_passengers()
 	{
-		int total = 0;
-		for (int i = 0; i < this.moveQueue.size(); i++)
+		// only loads when the train has currently arrived at the station
+		for (int i = 0; i < 5; i++)
 		{
-			int req_dst_ts = this.moveQueue.get(i).getDestination();
-			if (req_dst_ts == this.currentTrainStation)
+			int pr = this.manager.trainStations[this.currentTrainStation].passengerRequests[i];
+			if (pr > 0)
 			{
-				total += this.moveQueue.get(i).getn_pass();
+				int expected_arrival_time = SimClock.getTime() + this.calculateTravelTime(i);
+				this.createTrainEvent(this.currentTrainStation, i, expected_arrival_time, pr);
+				this.passengerDestinations[i] += pr;
+				this.manager.trainStations[this.currentTrainStation].passengerRequests[i] = 0;
 			}
 		}
-		return total;
 	}
 	
 	public void filter_moveQueue()
@@ -199,21 +208,10 @@ public class Train extends Thread
 		return te_index;
 	}
 	
-	public int get_latest_arrival_time()
+
+	public void createTrainEvent(int origination, int destination, int expectedArrival, int n_pass)
 	{
-		TrainEvent last = this.moveQueue.get(0);
-		return last.getExpectedArrival();
-	}
-	
-	public int get_Destination_tid()
-	{
-		TrainEvent last = this.moveQueue.get(0);
-		return last.getDestination();
-	}
-	
-	public void createTrainEvent(int destination, int expectedArrival, int n_pass)
-	{
-		TrainEvent te = new TrainEvent(destination, expectedArrival, n_pass);
+		TrainEvent te = new TrainEvent(origination, destination, expectedArrival, n_pass);
 		this.moveQueue.add(te);
 	}
 	
