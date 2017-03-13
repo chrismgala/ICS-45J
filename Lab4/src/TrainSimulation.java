@@ -30,6 +30,7 @@
 // â€� A train does not have a max capacity of passengers.
 
 import java.util.*;
+import java.io.*;
 
 public class TrainSimulation
 {
@@ -45,6 +46,49 @@ public class TrainSimulation
 	public TrainSimulation()
 	{
 		this.tsm = new TrainSystemManager();
+		
+		BufferedReader br = null;
+        try 
+        {
+            br = new BufferedReader(new FileReader("TrainConfig.txt"));
+            String line = br.readLine();
+            this.totalSimulationTime = Integer.parseInt(line);
+            line = br.readLine();
+            this.simulatedSecondRate = Integer.parseInt(line);
+            
+            for (int i = 0; i < 5; i++)
+            {
+            	String[] lines = br.readLine().split(";");
+            	ArrayList<PassengerArrival> ts = new ArrayList<PassengerArrival>();
+            	
+            	for (int j = 0; j < lines.length; j++)
+            	{
+            		String[] arrivalRate = lines[j].split(" ");
+
+            		ts.add(new PassengerArrival(Integer.parseInt(arrivalRate[0]), i, Integer.parseInt(arrivalRate[1]), Integer.parseInt(arrivalRate[2])));
+            	}
+            	
+            	passengerArrivals.add(ts);
+            }
+        } 
+        catch (IOException e) 
+        {
+            e.printStackTrace();
+        }
+        finally 
+        {
+            try 
+            {
+                if (br != null) 
+                {
+                    br.close();
+                }
+            } 
+            catch (IOException ex) 
+            {
+                ex.printStackTrace();
+            }
+        }
 	}
 	
 	public void start()
@@ -52,43 +96,7 @@ public class TrainSimulation
 		// Runs the main simulation loop including incrementing the 
 		// simulated time and managing passenger arrival behavior. 
 		// The simulation ends when the current simulation time is greater 
-		// than the total simulation time defined in trainConfig.txt
-		
-		// Example values from instructions
-		totalSimulationTime = 1000;
-		simulatedSecondRate = 100;
-		
-		// Train station 0 => 2 4 100;5 2 300
-		ArrayList<PassengerArrival> ts0 = new ArrayList<PassengerArrival>();
-		ts0.add(new PassengerArrival(2, 0, 4, 100));
-		ts0.add(new PassengerArrival(5, 0, 2, 300));
-		
-		// Train station 1 => 3 0 500;1 4 200
-		ArrayList<PassengerArrival> ts1 = new ArrayList<PassengerArrival>();
-		ts1.add(new PassengerArrival(3, 1, 0, 500));
-		ts1.add(new PassengerArrival(1, 1, 4, 200));
-		
-		// Train station 2 => 5 0 200;2 1 500;3 3 600
-		ArrayList<PassengerArrival> ts2 = new ArrayList<PassengerArrival>();
-		ts2.add(new PassengerArrival(5, 2, 0, 200));
-		ts2.add(new PassengerArrival(2, 2, 1, 500));
-		ts2.add(new PassengerArrival(3, 2, 3, 600));
-		
-		// Train station 3 => 4 0 200
-		ArrayList<PassengerArrival> ts3 = new ArrayList<PassengerArrival>();
-		ts3.add(new PassengerArrival(4, 3, 0, 200));
-
-		// Train station 4 => 2 3 300;6 2 100;4 0 40
-		ArrayList<PassengerArrival> ts4 = new ArrayList<PassengerArrival>();
-		ts4.add(new PassengerArrival(2, 4, 3, 300));
-		ts4.add(new PassengerArrival(6, 4, 2, 100));
-		ts4.add(new PassengerArrival(4, 4, 0, 40));
-		
-		passengerArrivals.add(ts0);
-		passengerArrivals.add(ts1);
-		passengerArrivals.add(ts2);
-		passengerArrivals.add(ts3);
-		passengerArrivals.add(ts4);
+		// than the total simulation time defined in TrainConfig.txt
 		
 		Train t0 = new Train(0, tsm);
 		Train t1 = new Train(1, tsm);
