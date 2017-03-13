@@ -40,7 +40,7 @@ public class Train extends Thread
 		// Should continuously loop and process trainEvents in the moveQueue.
 		System.out.println("Running " +  Integer.toString(this.trainID) );
 
-		while(true) 
+		while(SimClock.getTime() <= TrainSimulation.totalSimulationTime) 
 	    {
 			if (this.moveQueue.isEmpty())
 			{
@@ -59,13 +59,19 @@ public class Train extends Thread
 					// another train station to pick up passengers
 					int curr_sim_time = SimClock.getTime();
 					int expected_travel_time = curr_sim_time + this.calculateTravelTime(toRun.getOrigination());
-	
+					
+					// end thread if train arrives later then the totalSimulationTime
+					if (expected_travel_time >= TrainSimulation.totalSimulationTime)
+					{
+						break;
+					}
+					
 					System.out.println("Train " + Integer.toString(this.trainID) + " is moving to " + Integer.toString(toRun.getOrigination()) + 
 							" from " + Integer.toString(this.currentTrainStation) + " at expected Arrival Time: " + Integer.toString(expected_travel_time));
 					
 					// do nothing while the train is driving to the dst
 					try {
-						Thread.sleep(Math.round(expected_travel_time*100) - curr_sim_time*100);
+						Thread.sleep(Math.round(expected_travel_time*TrainSimulation.simulatedSecondRate) - curr_sim_time*TrainSimulation.simulatedSecondRate);
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -93,6 +99,7 @@ public class Train extends Thread
 				int num_to_load = this.num_passengers_to_load();
 				if (num_to_load > 0)
 				{
+					this.totalLoadedPassengers += num_to_load;
 					this.setNumPassengers(this.getNumPassengers() + num_to_load);
 					this.load_passengers();
 					System.out.println("LOADED: Train " + Integer.toString(this.trainID) + " has now a total of " + Integer.toString(this.getNumPassengers()) + " passengers");
@@ -104,8 +111,10 @@ public class Train extends Thread
 				int num_to_unload = this.passengerDestinations[this.currentTrainStation];
 				if (num_to_unload > 0)
 				{
+					this.totalUnloadedPassengers += num_to_unload;
 					this.setNumPassengers(this.getNumPassengers() - num_to_unload);
 					this.passengerDestinations[this.currentTrainStation] -= num_to_unload;
+					this.manager.trainStations[this.currentTrainStation].arrivedPassengers[toRun.getOrigination()] += num_to_unload;
 					System.out.println("UNLOADED: Train " + Integer.toString(this.trainID) + " has now a total of " + Integer.toString(this.getNumPassengers()) + " passengers");
 				}
 				this.moveQueue.remove(0);
@@ -118,13 +127,19 @@ public class Train extends Thread
 					// we need to go to another train station to pick up passengers
 					int curr_sim_time = SimClock.getTime();
 					int expected_travel_time = curr_sim_time + this.calculateTravelTime(toRun.getDestination());
-	
+					
+					// end thread if train arrives later then the totalSimulationTime
+					if (expected_travel_time >= TrainSimulation.totalSimulationTime)
+					{
+						break;
+					}
+					
 					System.out.println("Train " + Integer.toString(this.trainID) + " is moving to " + Integer.toString(toRun.getDestination()) + 
 							" from " + Integer.toString(this.currentTrainStation) + " at expected Arrival Time: " + Integer.toString(expected_travel_time));
 					
 					// do nothing while the train is driving to the dst
 					try {
-						Thread.sleep(Math.round(expected_travel_time*100) - curr_sim_time*100);
+						Thread.sleep(Math.round(expected_travel_time*TrainSimulation.simulatedSecondRate) - curr_sim_time*TrainSimulation.simulatedSecondRate);
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();

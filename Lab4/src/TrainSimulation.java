@@ -34,8 +34,8 @@ import java.io.*;
 
 public class TrainSimulation
 {
-	private int totalSimulationTime;
-	private int simulatedSecondRate;
+	public static int totalSimulationTime;
+	public static int simulatedSecondRate;
 	
 	TrainSystemManager tsm;
 	
@@ -124,13 +124,35 @@ public class TrainSimulation
 					all_arrival_times.remove(next_event.getKey());
 				}
 			}
-			
 		}
+		this.printTrainState();
 	}
 	
 	public void printTrainState()
 	{
+		for (int i = 0; i < 5; i++)
+		{
+			TrainStation ts = this.tsm.trainStations[i];
+			int totalNumPassengers = ts.getTotalPassengers();
+			int arrivedNumPassengers = ts.getArrivedPassengers();
+			int currentNumPassengers = ts.getPassengerRequests();
+			// Print out state for each train station
+			System.out.println("STATE REPORT for Train Station " + Integer.toString(i));
+			System.out.println("Total number of passengers requested: " + Integer.toString(totalNumPassengers));
+			System.out.println("Total number of passengers arrived: " + Integer.toString(arrivedNumPassengers));
+			System.out.println("Current number of passengers waiting: " + Integer.toString(currentNumPassengers));
+			System.out.println("Current train heading to station: " + Integer.toString(ts.getApproachingTrain()));
+		}
 		
+		// Print out state of each train
+		for (int i = 0; i < 5; i++)
+		{
+			Train t = this.trains.get(i);
+			System.out.println("STATE REPORT for Train " + Integer.toString(i));
+			System.out.println("Total number of loaded passengers: " + Integer.toString(t.getTotalLoadedPassengers()));
+			System.out.println("Total number of unloaded passengers: " + Integer.toString(t.getTotalUnloadedPassengers()));
+			System.out.println("Current number of passengers: " + Integer.toString(t.getNumPassengers()));
+		}
 	}
 	
 	public void parseTrainConfig()
@@ -140,9 +162,9 @@ public class TrainSimulation
         {
             br = new BufferedReader(new FileReader("TrainConfig.txt"));
             String line = br.readLine();
-            this.totalSimulationTime = Integer.parseInt(line);
+            TrainSimulation.totalSimulationTime = Integer.parseInt(line);
             line = br.readLine();
-            this.simulatedSecondRate = Integer.parseInt(line);
+            TrainSimulation.simulatedSecondRate = Integer.parseInt(line);
             
             for (int i = 0; i < 5; i++)
             {
@@ -177,25 +199,5 @@ public class TrainSimulation
                 ex.printStackTrace();
             }
         }
-	}
-
-	public int getTotalSimulationTime()
-	{
-		return totalSimulationTime;
-	}
-
-	public void setTotalSimulationTime(int totalSimulationTime)
-	{
-		this.totalSimulationTime = totalSimulationTime;
-	}
-
-	public int getSimulatedSecondRate()
-	{
-		return simulatedSecondRate;
-	}
-
-	public void setSimulatedSecondRate(int simulatedSecondRate)
-	{
-		this.simulatedSecondRate = simulatedSecondRate;
 	}
 }

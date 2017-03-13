@@ -42,7 +42,7 @@ public class PassengerArrival
 			double t_arr = -Math.log(u)/avg_occ;
 			int rt = (int) Math.round(t_arr);
 			start += rt;
-			if (start > 1000){
+			if (start > TrainSimulation.totalSimulationTime){
 				break;
 			}
 			arrivalTimes.add(start);

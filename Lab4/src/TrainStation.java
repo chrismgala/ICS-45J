@@ -19,6 +19,15 @@ public class TrainStation
 		this.approachingTrain = -1;
 	}
 	
+	public int getTotalPassengers(){
+		int total = 0;
+		for (int i = 0; i < 5; i++)
+		{
+			total += this.totalDestinationRequests[i];
+		}
+		return total;
+	}
+	
 	public int[] getTotalDestinationRequests()
 	{
 		return totalDestinationRequests;
@@ -29,9 +38,14 @@ public class TrainStation
 		this.totalDestinationRequests = totalDestinationRequests;
 	}
 	
-	public int[] getArrivedPassengers()
+	public int getArrivedPassengers()
 	{
-		return arrivedPassengers;
+		int total = 0;
+		for (int i = 0; i < 5; i++)
+		{
+			total += this.arrivedPassengers[i];
+		}
+		return total;	
 	}
 	
 	public void setArrivedPassengers(int[] arrivedPassengers)
@@ -39,9 +53,14 @@ public class TrainStation
 		this.arrivedPassengers = arrivedPassengers;
 	}
 	
-	public int[] getPassengerRequests()
+	public int getPassengerRequests()
 	{
-		return passengerRequests;
+		int total = 0;
+		for (int i = 0; i < 5; i++)
+		{
+			total += this.passengerRequests[i];
+		}
+		return total;		
 	}
 	
 	public void setPassengerRequests(int[] passengerRequests)

@@ -9,7 +9,7 @@ public class Lab4
 	
 	public static void main(String[] args)
 	{
-		TrainSimulation ts = new TrainSimulation();
-		ts.start();
+		TrainSimulation tsim = new TrainSimulation();
+		tsim.start();
 	}
 }
