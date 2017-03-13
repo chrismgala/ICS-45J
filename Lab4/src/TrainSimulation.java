@@ -46,49 +46,8 @@ public class TrainSimulation
 	public TrainSimulation()
 	{
 		this.tsm = new TrainSystemManager();
+		parseTrainConfig();
 		
-		BufferedReader br = null;
-        try 
-        {
-            br = new BufferedReader(new FileReader("TrainConfig.txt"));
-            String line = br.readLine();
-            this.totalSimulationTime = Integer.parseInt(line);
-            line = br.readLine();
-            this.simulatedSecondRate = Integer.parseInt(line);
-            
-            for (int i = 0; i < 5; i++)
-            {
-            	String[] lines = br.readLine().split(";");
-            	ArrayList<PassengerArrival> ts = new ArrayList<PassengerArrival>();
-            	
-            	for (int j = 0; j < lines.length; j++)
-            	{
-            		String[] arrivalRate = lines[j].split(" ");
-
-            		ts.add(new PassengerArrival(Integer.parseInt(arrivalRate[0]), i, Integer.parseInt(arrivalRate[1]), Integer.parseInt(arrivalRate[2])));
-            	}
-            	
-            	passengerArrivals.add(ts);
-            }
-        } 
-        catch (IOException e) 
-        {
-            e.printStackTrace();
-        }
-        finally 
-        {
-            try 
-            {
-                if (br != null) 
-                {
-                    br.close();
-                }
-            } 
-            catch (IOException ex) 
-            {
-                ex.printStackTrace();
-            }
-        }
 	}
 	
 	public void start()
@@ -176,7 +135,48 @@ public class TrainSimulation
 	
 	public void parseTrainConfig()
 	{
-		
+		BufferedReader br = null;
+        try 
+        {
+            br = new BufferedReader(new FileReader("TrainConfig.txt"));
+            String line = br.readLine();
+            this.totalSimulationTime = Integer.parseInt(line);
+            line = br.readLine();
+            this.simulatedSecondRate = Integer.parseInt(line);
+            
+            for (int i = 0; i < 5; i++)
+            {
+            	String[] lines = br.readLine().split(";");
+            	ArrayList<PassengerArrival> ts = new ArrayList<PassengerArrival>();
+            	
+            	for (int j = 0; j < lines.length; j++)
+            	{
+            		String[] arrivalRate = lines[j].split(" ");
+
+            		ts.add(new PassengerArrival(Integer.parseInt(arrivalRate[0]), i, Integer.parseInt(arrivalRate[1]), Integer.parseInt(arrivalRate[2])));
+            	}
+            	
+            	passengerArrivals.add(ts);
+            }
+        } 
+        catch (IOException e) 
+        {
+            e.printStackTrace();
+        }
+        finally 
+        {
+            try 
+            {
+                if (br != null) 
+                {
+                    br.close();
+                }
+            } 
+            catch (IOException ex) 
+            {
+                ex.printStackTrace();
+            }
+        }
 	}
 
 	public int getTotalSimulationTime()
