@@ -1,5 +1,5 @@
 // SimClock.java
-// 
+// SimClock is the time that this simulation runs on.
 
 // Chris Gala 64338761
 // Wai Phyo 60902242

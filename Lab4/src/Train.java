@@ -1,5 +1,6 @@
 // Train.java
-// 
+// The class representing each of the 5 instances of Train threads. This class extends properties of a
+// Thread since there are 5 that will be moving and accessing shared data simultaneously.
 
 // Chris Gala 64338761
 // Wai Phyo 60902242
@@ -8,7 +9,6 @@ import java.util.*;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-// Each train will check the state of the train system and passengers without sleeping.
 
 public class Train extends Thread
 {
@@ -52,9 +52,10 @@ public class Train extends Thread
 				// there is a request to pick up passengers
 				if (!this.moveQueue.isEmpty())
 				{
+					this.lock.lock();
+
 					TrainEvent toRun = this.moveQueue.get(0);
 					
-					this.lock.lock();
 					// lock the train.. move to ... 
 					// another train station to pick up passengers
 					int curr_sim_time = SimClock.getTime();
@@ -170,9 +171,9 @@ public class Train extends Thread
 		}
 	}
 	
+	// check all train stations for passengers and queue it into MoveQueue if there is a pending request
 	public void check_requests()
 	{
-		// check all train stations for passengers and queue it into MoveQueue if there is a pending request
 		Boolean assigned = false;
 		for (int i = 0; i < 5; i++){
 			for (int j = 0; j < 5; j++)
@@ -199,6 +200,7 @@ public class Train extends Thread
 		}
 	}
 	
+	// calculate how many passengers need to be loaded
 	public int num_passengers_to_load()
 	{
 		int total = 0;
@@ -209,9 +211,9 @@ public class Train extends Thread
 		return total;
 	}
 	
+	// only loads when the train has currently arrived at the station
 	public void load_passengers()
 	{
-		// only loads when the train has currently arrived at the station
 		for (int i = 0; i < 5; i++)
 		{
 			int pr = this.manager.trainStations[this.currentTrainStation].passengerRequests[i];
@@ -222,10 +224,10 @@ public class Train extends Thread
 				this.createTrainEvent(this.currentTrainStation, i, expected_arrival_time);
 				this.passengerDestinations[i] += pr;
 				this.manager.trainStations[this.currentTrainStation].passengerRequests[i] = 0;
-//				System.out.println("Train #" + Integer.toString(this.trainID) + " just loaded " + Integer.toString(pr) + " passengers");
 			}
 		}
 	}
+	
 	
 	public void filter_moveQueue()
 	{
@@ -259,18 +261,20 @@ public class Train extends Thread
 		return te_index;
 	}
 	
-
+	// Create a TrainEvent and move it into the moveQueue
 	public void createTrainEvent(int origination, int destination, int expectedArrival)
 	{
 		TrainEvent te = new TrainEvent(origination, destination, expectedArrival);
 		this.moveQueue.add(te);
 	}
 	
+	// Calculate the travel time for a particular event
 	public int calculateTravelTime(int passengerTrainStation)
 	{
 		return (5 * (Math.abs(passengerTrainStation - this.currentTrainStation)));
 	}
 	
+	// Check whether a Train is busy or not
 	public boolean isBusy()
 	{
 		return this.numPassengers != 0;

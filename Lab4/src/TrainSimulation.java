@@ -1,33 +1,10 @@
 // TrainSimulation.java
-// 
+// Contains all logic for the simulation. This includes running the simulation loop and keeping track of
+// the SimClock time and incrementing it accordingly. After the simulation ends, TrainSimulation prints out the
+// appropriate statistics.
 
 // Chris Gala 64338761
 // Wai Phyo 60902242
-
-// Train system components such as the train threads and the TrainSystemManager.
-
-// Each train will run in its own thread.
-
-// All trains start on the 0th train station.
-
-// A train will only head to a train station to load passengers if it currently
-// does not have any passengers and is not moving towards a train station.
-
-// By default, a train will load all passengers requesting to go up first.
-// 		o If a train reaches a train station to load passengers and there are no passengers that want to go up, 
-// 	then the train will load all passengers that want to go down.
-
-//	â€� The train must drop off current passengers to the train station that it is
-//	closest to.
-//		o For example, if the train at train station 2 has two passengers requesting to go to train station 3 and train station 4, then it will stop at train station 3 first and then train station 4 (not 4 and then 3).
-
-//	â€� If a train has no passengers to drop off, then it will continuously check all train stations to see if any passengers are waiting for a train and no other train is approaching that train station for passenger pickup.
-//		o No two trains will approach a train station for passenger pickup at the same time.
-
-// â€� If a train detects that there are passengers waiting on a train station, and no other train is currently approaching a train station for passenger pickup, then it will go towards that train station to load passengers.
-// â€� A train takes 10 simulated seconds to load / unload passengers.
-// â€� A train takes 5 simulated seconds to pass through one train station.
-// â€� A train does not have a max capacity of passengers.
 
 import java.util.*;
 import java.io.*;
@@ -50,13 +27,12 @@ public class TrainSimulation
 		
 	}
 	
+	// Runs the main simulation loop including incrementing the 
+	// simulated time and managing passenger arrival behavior. 
+	// The simulation ends when the current simulation time is greater 
+	// than the total simulation time defined in TrainConfig.txt
 	public void start()
-	{
-		// Runs the main simulation loop including incrementing the 
-		// simulated time and managing passenger arrival behavior. 
-		// The simulation ends when the current simulation time is greater 
-		// than the total simulation time defined in TrainConfig.txt
-		
+	{	
 		Train t0 = new Train(0, tsm);
 		Train t1 = new Train(1, tsm);
 		Train t2 = new Train(2, tsm);
@@ -96,7 +72,6 @@ public class TrainSimulation
 				System.out.println(Integer.toString(SimClock.getTime()));
 				past_time = curr_time;
 			}
-			// DEBUGGING PURPOSES
 			
 			
 			// NOW MANAGE PASSENGER BEHAVIOR
@@ -125,9 +100,11 @@ public class TrainSimulation
 				}
 			}
 		}
+		
 		this.printTrainState();
 	}
 	
+	// Print all statistics for each Train and each TrainStation
 	public void printTrainState()
 	{
 		for (int i = 0; i < 5; i++)
@@ -155,6 +132,7 @@ public class TrainSimulation
 		}
 	}
 	
+	// Read the TrainConfig.txt file and load the data into the class variables
 	public void parseTrainConfig()
 	{
 		BufferedReader br = null;

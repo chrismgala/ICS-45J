@@ -1,5 +1,6 @@
 // TrainSystemManager.java
-// 
+// The manager for all TrainStations. This holds all 5 of them and allows for the book keeping of information
+// regarding each one from other classes.
 
 // Chris Gala 64338761
 // Wai Phyo 60902242

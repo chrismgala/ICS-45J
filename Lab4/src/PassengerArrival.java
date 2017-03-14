@@ -1,5 +1,7 @@
 // PassengerArrival.java
-// 
+// This class is used to represent each of the lines (2 - 7) of the TrainConfig that is parsed.
+// We can generate the arrival times based on those lines in the TrainConfig ahead of time. This is randomized
+// each time because in a "real" simulation, the PassengerArrivals would not be constant and the same each time.
 
 // Chris Gala 64338761
 // Wai Phyo 60902242
@@ -32,9 +34,9 @@ public class PassengerArrival
 		generateArrivalTimes();
 	}
 	
+	// use poison point process to generate all passenger arrival times at a station
 	public void generateArrivalTimes()
 	{
-		// use poison point process to generate all passenger arrival times at a station
 		int start = 0;
 		double avg_occ = this.numPassengers/(double)timePeriod;
 		while (true){

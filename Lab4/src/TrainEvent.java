@@ -1,5 +1,7 @@
 // TrainEvent.java
-// 
+// A class representing an event in which a Train needs to go from 'origination' TrainStation to 'destination'
+// TrainStation. An calculated time of arrival is stored as well so that the corresponding Train thread can be
+// blocked off for the time being.
 
 // Chris Gala 64338761
 // Wai Phyo 60902242

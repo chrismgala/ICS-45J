@@ -1,5 +1,6 @@
 // TrainStation.java
-// 
+// The TrainStation class. There will be 5 instances of this class and their states will be managed
+// using these class variables and methods while the simulation runs.
 
 // Chris Gala 64338761
 // Wai Phyo 60902242
